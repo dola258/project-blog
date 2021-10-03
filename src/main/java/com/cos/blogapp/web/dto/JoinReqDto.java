@@ -1,5 +1,7 @@
 package com.cos.blogapp.web.dto;
 
+import com.cos.blogapp.domain.user.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +14,12 @@ public class JoinReqDto {
 	private String password;
 	private String email;
 	
-	
+	public User toEntity() {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setEmail(email);
+		
+		return user;
+	}
 }

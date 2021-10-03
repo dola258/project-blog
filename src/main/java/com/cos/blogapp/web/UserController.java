@@ -70,12 +70,7 @@ public class UserController {
 	public String join(JoinReqDto dto) { // username=love&password=1234&email=love@nate.com으로 데이터가 들어온다
 
 		// User 객체에 데이터를 넣고 User 객체로 받기
-		User user = new User();
-		user.setUsername(dto.getUsername());
-		user.setPassword(dto.getPassword());
-		user.setEmail(dto.getEmail());
-		
-		userRepository.save(user);
+		userRepository.save(dto.toEntity());
 		
 		return "redirect:/loginForm"; //리다이렉션(http상태코드: 300)
 	}
