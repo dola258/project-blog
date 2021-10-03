@@ -1,5 +1,7 @@
 package com.cos.blogapp.web;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	
 	private final UserRepository userRepository;
+	private final HttpSession session;
 	
 	@GetMapping("/test/query/join")
 	public void testQueryJoin() {
@@ -55,14 +58,22 @@ public class UserController {
 	//--------로그인 기능---------
 	@PostMapping("/login")
 	public String login(LoginReqDto dto) {
+		
 		// 1. username, password 받기
 		System.out.println(dto.getUsername());
 		System.out.println(dto.getPassword());
+		
 		// 2. DB 조회
-		// 3. 있으면
-		// 4. session에 저장
-		// 5. 메인페이지를 돌려주기
-		return "home";
+		User userEntity = userRepository.mLogin(dto.getUsername(), dto.getPassword());
+		
+		if(userEntity == null) {
+			// null이면 loginForm으로 
+			return "redirect:/loginForm";
+		} else {
+			// null이 아니면 session에 User 오브젝트 저장 후 home으로 이동
+			session.setAttribute("principal", userEntity);
+			return "redirect:/home";
+		}
 	}
 	
 	//--------회원가입 기능---------
