@@ -1,6 +1,6 @@
 package com.cos.blogapp.web.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.AllArgsConstructor;	
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LoginReqDto {
+public class LoginDto {
 	private String username;
 	private String password;
 	

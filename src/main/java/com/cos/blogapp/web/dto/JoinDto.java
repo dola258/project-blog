@@ -1,6 +1,6 @@
 package com.cos.blogapp.web.dto;
 
-import com.cos.blogapp.domain.user.User;
+import com.cos.blogapp.domain.user.User;	
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class JoinReqDto {
+public class JoinDto {
 	private String username;
 	private String password;
 	private String email;

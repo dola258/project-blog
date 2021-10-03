@@ -7,10 +7,10 @@
 <div class="container">
 	<form action="/login" method="POST">
 		<div class="form-group">
-			<input type="text" name="username" class="form-control" placeholder="Enter username">
+			<input type="text" name="username" class="form-control" placeholder="Enter username" required="required">
 		</div>
 		<div class="form-group">
-			<input type="password" name="password" class="form-control"	placeholder="Enter password">
+			<input type="password" name="password" class="form-control"	placeholder="Enter password" required="required">
 		</div>
 		<button type="submit" class="btn btn-primary">로그인</button>
 	</form>
