@@ -1,0 +1,23 @@
+[33mcommit 89f98ff3cb5af3ebf49ef53fbd07a72c822fd4b4[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: dola258 <dola258@naver.com>
+Date:   Sun Oct 3 12:18:31 2021 +0900
+
+    isnert 테스트/함수 직접 만들어서 isnert
+
+[33mcommit 640dbf82c041883efee7041e8cda3a4bf16aa4ff[m
+Author: dola258 <dola258@naver.com>
+Date:   Sun Oct 3 11:50:29 2021 +0900
+
+    MariaDB 연결
+
+[33mcommit 83404ad54961f17dc96d99cbe6d38b97d5cc66a0[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: dola258 <dola258@naver.com>
+Date:   Sun Oct 3 11:01:23 2021 +0900
+
+    Lombok
+
+[33mcommit 75a8ba23fc99837fdf9c51d2447e68e21308aa39[m
+Author: dola258 <dola258@naver.com>
+Date:   Sat Oct 2 11:22:59 2021 +0900
+
+    홈페이지 헤더/풋 include

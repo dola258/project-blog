@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.domain.user.UserRepository;
+import com.cos.blogapp.web.dto.JoinReqDto;
 import com.cos.blogapp.web.dto.LoginReqDto;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class UserController {
 	}
 	
 	
-	
+	//--------홈페이지, 로그인페이지, 회원가입 페이지로 이동---------
 	@GetMapping("/home")
 	public String home() {
 		return "home";
@@ -51,6 +52,7 @@ public class UserController {
 		return "user/joinForm";
 	}
 	
+	//--------로그인 기능---------
 	@PostMapping("/login")
 	public String login(LoginReqDto dto) {
 		// 1. username, password 받기
@@ -61,5 +63,20 @@ public class UserController {
 		// 4. session에 저장
 		// 5. 메인페이지를 돌려주기
 		return "home";
+	}
+	
+	//--------회원가입 기능---------
+	@PostMapping("/join")
+	public String join(JoinReqDto dto) { // username=love&password=1234&email=love@nate.com으로 데이터가 들어온다
+
+		// User 객체에 데이터를 넣고 User 객체로 받기
+		User user = new User();
+		user.setUsername(dto.getUsername());
+		user.setPassword(dto.getPassword());
+		user.setEmail(dto.getEmail());
+		
+		userRepository.save(user);
+		
+		return "redirect:/loginForm"; //리다이렉션(http상태코드: 300)
 	}
 }
