@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.cos.blogapp.web.dto.LoginReqDto;
+
 @Controller
 public class UserController {
 	
@@ -24,10 +26,10 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public String login(String username, String password) {
+	public String login(LoginReqDto dto) {
 		// 1. username, password 받기
-		System.out.println(username);
-		System.out.println(password);
+		System.out.println(dto.getUsername());
+		System.out.println(dto.getPassword());
 		// 2. DB 조회
 		// 3. 있으면
 		// 4. session에 저장
