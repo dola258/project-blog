@@ -1,8 +1,15 @@
 package com.cos.blogapp.web;
 
-import javax.servlet.http.HttpSession;	
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -39,7 +46,20 @@ public class UserController {
 	
 	//--------로그인 기능---------
 	@PostMapping("/login")
-	public String login(LoginReqDto dto) {
+	public String login(@Valid LoginReqDto dto, BindingResult bindingResult, Model model) {
+		
+		System.out.println("에러사이즈: " + bindingResult.getFieldErrors().size());
+		
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errorMap = new HashMap<>();
+			for(FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+				System.out.println("필드 : " + error.getField());
+				System.out.println("메세지 : " + error.getDefaultMessage());
+			}
+			model.addAttribute("errorMap", errorMap);
+			return "error/error";
+		}
 		
 		// 1. username, password 받기
 		System.out.println(dto.getUsername());
@@ -60,18 +80,20 @@ public class UserController {
 	
 	//--------회원가입 기능---------
 	@PostMapping("/join")
-	public String join(JoinReqDto dto) { // username=love&password=1234&email=love@nate.com으로 데이터가 들어온다
+	public String join(@Valid JoinReqDto dto, BindingResult bindingResult, Model model) { // username=love&password=1234&email=love@nate.com으로 데이터가 들어온다
 		
-		if(dto.getUsername() == null ||
-		   dto.getPassword() == null ||
-		   dto.getEmail() == null ||
-		   !dto.getUsername().equals("") ||
-		   !dto.getPassword().equals("") ||
-		   !dto.getEmail().equals("")	
-		) {
+		System.out.println("에러사이즈: " + bindingResult.getFieldErrors().size());
+		
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errorMap = new HashMap<>();
+			for(FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+				System.out.println("필드 : " + error.getField());
+				System.out.println("메세지 : " + error.getDefaultMessage());
+			}
+			model.addAttribute("errorMap", errorMap);
 			return "error/error";
 		}
-		
 		
 		// User 객체에 데이터를 넣고 User 객체로 받기
 		userRepository.save(dto.toEntity());
