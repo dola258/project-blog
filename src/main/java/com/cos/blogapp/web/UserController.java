@@ -29,11 +29,8 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final HttpSession session;
 	
-	//--------홈페이지, 로그인페이지, 회원가입 페이지로 이동---------
-	@GetMapping({"/", "/home"})
-	public String home() {
-		return "home";
-	}
+	//---------로그인페이지, 회원가입 페이지로 이동---------
+
 	
 	// /WEB-INF/views/user/login.jsp
 	@GetMapping("/loginForm")
