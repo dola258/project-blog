@@ -48,9 +48,7 @@ public class UserController {
 	
 	//--------로그인 기능---------
 	@PostMapping("/login")
-	public @ResponseBody String login(@Valid LoginReqDto dto, BindingResult bindingResult) {
-		
-		System.out.println("에러사이즈: " + bindingResult.getFieldErrors().size());
+	public @ResponseBody String login(@Valid LoginReqDto dto, BindingResult bindingResult)  {
 		
 		if(bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
