@@ -65,7 +65,10 @@ public class UserController {
 		System.out.println(dto.getPassword());
 		
 		// 2. DB 조회
-		User userEntity = userRepository.mLogin(dto.getUsername(), dto.getPassword());
+		User userEntity = userRepository.mLogin(
+											dto.getUsername(), 
+											SHA256.encrypt(dto.getPassword(), MyAlgorithm.SHA256)
+											);
 		
 		if(userEntity == null) {
 			// null이면 loginForm으로 
