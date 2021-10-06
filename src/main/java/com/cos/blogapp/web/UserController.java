@@ -1,5 +1,6 @@
 package com.cos.blogapp.web;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.domain.user.UserRepository;
+import com.cos.blogapp.util.MyAlgorithm;
+import com.cos.blogapp.util.SHA256;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.JoinReqDto;
 import com.cos.blogapp.web.dto.LoginReqDto;
@@ -88,7 +91,11 @@ public class UserController {
 			}
 			return Script.back(errorMap.toString());
 		}
-
+		
+		String encPassword = SHA256.encrypt(dto.getPassword(), MyAlgorithm.SHA256);
+		
+		dto.setPassword(encPassword);
+		
 		// 2. 정상 - 로그인 페이지
 		// User 객체에 데이터를 넣고 User 객체로 받기
 		userRepository.save(dto.toEntity());

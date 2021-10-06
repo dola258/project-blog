@@ -5,16 +5,25 @@ import java.security.NoSuchAlgorithmException;
 
 public class SHA256 {
 	
-	public static void encrypt(String rawPassword) throws NoSuchAlgorithmException {
+	public static String encrypt(String rawPassword, MyAlgorithm algorithm)  {
+		
 		// 1. SHA256 함수를 가진 클래스 객체 가져오기
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
-		// 2. 비밀번호 1234 -> SHA256한테 던지기
+		MessageDigest md = null;
+		
+		try {
+			md = MessageDigest.getInstance(algorithm.getType()); // SHA-256, SHA-512
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+	
+		// 2. 비밀번호 1234코스 -> SHA256한테 던지기
 		md.update(rawPassword.getBytes());
 		
 		StringBuilder sb = new StringBuilder();
 		
-		System.out.println(rawPassword.getBytes());
-		System.out.println();
-		System.out.println(md.digest());
+		for(Byte b : md.digest()) {
+			sb.append(String.format("%02x", b));
+		}
+		return sb.toString();
 	}
 }
