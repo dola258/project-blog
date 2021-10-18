@@ -32,10 +32,19 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final HttpSession session;
 	
-	//---------로그인페이지, 회원가입 페이지로 이동---------
 
+	//--------로그아웃 기능---------
+	@GetMapping("/logout")
+	public String logout() {
+	//	session.setAttribute("principal", null);
+		session.invalidate(); // 세션 무효화 -> jsessonId에 있는 값을 비우는것
+		
+		return "redirect:/";  
+	}
 	
-	// /WEB-INF/views/user/login.jsp
+	
+	
+	//---------로그인페이지, 회원가입 페이지로 이동---------
 	@GetMapping("/loginForm")
 	public String login() {
 		return "user/loginForm";
@@ -45,6 +54,7 @@ public class UserController {
 	public String join() {
 		return "user/joinForm";
 	}
+	
 	
 	//--------로그인 기능---------
 	@PostMapping("/login")
@@ -74,11 +84,14 @@ public class UserController {
 			// null이면 loginForm으로 
 			return Script.back("아이디/비밀번호를 잘못 입력하였습니다.");
 		} else {
-			// null이 아니면 session에 User 오브젝트 저장 후 home으로 이동
+			// null이 아니면 session에 User 오브젝트 저장 후 home으로 이동 
+			// 세션 날라가는 조건 1. session.invalidate();
+			//					  2. 브라우저를 닫으면 날아감 
 			session.setAttribute("principal", userEntity);
 			return Script.href("/", "로그인 성공");
 		}
 	}
+	
 	
 	//--------회원가입 기능---------
 	@PostMapping("/join")
