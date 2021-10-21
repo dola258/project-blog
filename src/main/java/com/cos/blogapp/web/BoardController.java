@@ -39,11 +39,12 @@ public class BoardController {
 		
 		User principal = (User) session.getAttribute("principal");
 		
+		// AOP개념: 핵심기능은 아니고 공통기능-------------------
+		
 		// 인증 확인
 		if(principal == null) {
 			return Script.href("/loginForm", "잘못된 접근입니다");
 		// 	return Script.back("잘못된 접근입니다"); 뒤로가기
-					
 		}
 		
 		// 유효성 검사
@@ -56,10 +57,12 @@ public class BoardController {
 			}
 			return Script.back(errorMap.toString());
 		}
+		// AOP 끝
 		
 		boardRepository.save(dto.toEntity(principal));
 		
-		return Script.href("/", "글쓰기 완료");
+		return "redirect:/";
+	//	return Script.href("/", "글쓰기 완료");
 	}
 	
 	
