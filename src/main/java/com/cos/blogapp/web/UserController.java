@@ -1,4 +1,4 @@
-package com.cos.blogapp.web;
+ package com.cos.blogapp.web;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -36,8 +36,9 @@ public class UserController {
 	//--------로그아웃 기능---------
 	@GetMapping("/logout")
 	public String logout() {
+	//  세션 무효화 -> jsessonId에 있는 값을 비우는것
 	//	session.setAttribute("principal", null);
-		session.invalidate(); // 세션 무효화 -> jsessonId에 있는 값을 비우는것
+		session.invalidate(); 
 		
 		return "redirect:/";  
 	}

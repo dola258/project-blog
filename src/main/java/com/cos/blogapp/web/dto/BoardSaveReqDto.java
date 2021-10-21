@@ -14,7 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardSaveReqDto {
-
+	
+	
+	
 	@Size(min = 1, max = 50) // valid 체크를 위해서 적는다
 	@NotBlank
 	private String title;
