@@ -1,7 +1,7 @@
 package com.cos.blogapp.web;
 
 
-import java.util.HashMap;	
+import java.util.HashMap;		
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,10 +31,25 @@ import lombok.RequiredArgsConstructor;
 @Controller // 컴포넌트 스캔(스프링) IoC
 public class BoardController {
 
+	// DI
 	private final BoardRepository boardRepository;
 	private final HttpSession session;
 	
-	//글 작성 기능
+	
+	//글 상세보기---------------------------------------------------------------------
+	// 쿼리스트링, pathvariable => 디비 where 에 걸리는 친구들!!
+	// 1. 컨트롤러 선정, 2. Http Method 선정, 3. 받을 데이터가 있는지!! (body, 쿼리스트링, 패스var)
+	// 4. 디비에 접근을 해야하면 Model 접근하기 orElse Model에 접근할 필요가 없다.
+	@GetMapping("/board/{id}")
+	public String detail(@PathVariable int id, Model model) {
+		
+		Board boardEntity = boardRepository.getById(id).get();
+		model.addAttribute(boardEntity);
+		return "board/detail";
+	}
+	
+	
+	//글 작성 기능---------------------------------------------------------------------
 	@PostMapping("/board")
 	public @ResponseBody String save(@Valid BoardSaveReqDto dto, BindingResult bindingResult) {
 		
@@ -66,7 +82,7 @@ public class BoardController {
 	}
 	
 	
-	// 글 작성 호출
+	// 글 작성 호출---------------------------------------------------------------------
 	@GetMapping("/board/saveForm")
 	public String saveForm() {
 		return "board/saveForm";
@@ -74,7 +90,7 @@ public class BoardController {
 	
 	
 	
-	// 보드 목록 호출
+	// 보드 목록 호출---------------------------------------------------------------------
 	@GetMapping("/board")
 	public String home(Model model, int page) {
 		
