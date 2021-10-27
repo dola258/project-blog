@@ -43,8 +43,18 @@ public class BoardController {
 	@GetMapping("/board/{id}")
 	public String detail(@PathVariable int id, Model model) {
 		
-		Board boardEntity = boardRepository.getById(id).get();
+
+		// 방법 1 - orElse는 값을 찾으면 Board가 리턴, 못찾으면 (괄호안 내용 리턴)
+		/*
+		Board boardEntity =  boardRepository.findById(id)
+				.orElse(new Board(100, "글없어요", "글없어요", null));
+		*/
+		// 방법 2 - orElseThrow
+		Board boardEntity =  boardRepository.findById(id)
+				.orElseThrow();
+
 		model.addAttribute(boardEntity);
+		
 		return "board/detail";
 	}
 	
