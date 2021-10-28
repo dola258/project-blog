@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -32,7 +33,20 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final HttpSession session;
 	
-
+	
+	// 회원정보페이지-----------------------------
+	@GetMapping("user/{id}")
+	public String userInfo(@PathVariable int id) {
+		// 기본은 userRepository.findById(id)로 DB에서 가져와야함
+		// 편법은 세션에서 값을 가져올 수도 있다 - 인증과 권한 필요 없음
+		// 세션에 있는 값을 쓸거라서 모델에 담아 갈 필요가 없다(로그인을 했다)
+		
+		
+		
+		return "user/updateForm";
+	}
+	
+	
 	//--------로그아웃 기능---------
 	@GetMapping("/logout")
 	public String logout() {

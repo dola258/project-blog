@@ -3,6 +3,7 @@ package com.cos.blogapp.web;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -45,15 +46,19 @@ public class BoardController {
 	public String detail(@PathVariable int id, Model model) {
 		
 
-		// 방법 1 - orElse는 값을 찾으면 Board가 리턴, 못찾으면 (괄호안 내용 리턴)
+		// 방법 1 - orElse는 값을 찾으면 Board가 리턴, 못찾으면 (괄호안 내용 리턴) - 추천 xxx
 		/*
+		
 		Board boardEntity =  boardRepository.findById(id)
 				.orElse(new Board(100, "글없어요", "글없어요", null));
+		
 		*/
+		
 		// 방법 2 - orElseThrow
 		Board boardEntity =  boardRepository.findById(id)
 				.orElseThrow(()-> new MyNotFoundException(id+" 못찾았어요") );
-
+	
+		
 		model.addAttribute(boardEntity);
 		
 		return "board/detail";
@@ -88,8 +93,8 @@ public class BoardController {
 		
 		boardRepository.save(dto.toEntity(principal));
 		
-		return "redirect:/";
-	//	return Script.href("/", "글쓰기 완료");
+	//	return "redirect:/";
+		return Script.href("/", "글쓰기 완료");
 	}
 	
 	
