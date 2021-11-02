@@ -17,7 +17,7 @@ public class BoardSaveReqDto {
 	
 	
 	
-	@Size(min = 1, max = 50) // valid 체크를 위해서 적는다
+	@Size(min = 2, max = 50) // valid 체크를 위해서 적는다
 	@NotBlank
 	private String title;
 	private String content; // content는 null도 가능하고 4GB라서 길이 제한도 필요없다

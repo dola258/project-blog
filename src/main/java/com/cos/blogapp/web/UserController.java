@@ -1,6 +1,5 @@
  package com.cos.blogapp.web;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 

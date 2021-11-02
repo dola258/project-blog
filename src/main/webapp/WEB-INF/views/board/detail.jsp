@@ -4,9 +4,27 @@
 
 <div class="container">
 		<a href="#" class="btn btn-warning">수정</a>
-		<form action="#" method="post" style="display:inline-block">
-			<button id="btn-delete" class="btn btn-danger" type="submit">삭제</button>
-		</form>
+		<button class="btn btn-danger" onclick="deleteById(${boardEntity.id})" type="submit">삭제</button>
+	
+	<script>
+		async function deleteById(id) {
+			// 1. 비동기 함수 호출
+			let response = await fetch("/board/"+id, {
+				method: "delete"
+			});
+			
+			// 2. 코드
+			let parseResponse = await response.text();
+			console.log(parseResponse);
+			
+			alert("삭제성공");
+			location.href= "/";
+			
+		
+		}
+	</script>
+
+
 
 	<br /><br />
 	<div>
