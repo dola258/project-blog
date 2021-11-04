@@ -3,7 +3,6 @@ package com.cos.blogapp.web;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +36,13 @@ public class BoardController {
 	// DI
 	private final BoardRepository boardRepository;
 	private final HttpSession session;
-	
+	// 글 삭제하기--------------------------------------------------------------------
+	@DeleteMapping("/board/{id}")
+	public @ResponseBody String deleteById(@PathVariable int id) {
+			
+		boardRepository.deleteById(id);
+		return "ok"; // @ResponseBody -> 데이터리턴!! (String = text/plain)
+	}
 	
 	//글 상세보기---------------------------------------------------------------------
 	// 쿼리스트링, pathvariable => 디비 where 에 걸리는 친구들!!
@@ -59,7 +65,7 @@ public class BoardController {
 				.orElseThrow(()-> new MyNotFoundException(id+" 못찾았어요") );
 	
 		
-		model.addAttribute(boardEntity);
+		model.addAttribute("boardEntity", boardEntity);
 		
 		return "board/detail";
 	}
