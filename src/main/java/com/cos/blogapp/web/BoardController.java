@@ -38,18 +38,23 @@ public class BoardController {
 
 	// DI
 	private final BoardRepository boardRepository;
-	private final UserRepository userRepository;
 	private final HttpSession session;
 	
 	
+	// 글 수정페이지로 이동-----------------------------------------------------------------
+	@GetMapping("/board/updateForm")
+	public String boardUpdateForm() {
+		
+		return "/board/updateForm";
+	}
 	
-	// 글 삭제하기--------------------------------------------------------------------
+	
+	// 글 삭제하기(API(AJAX) 요청)----------------------------------------------------------
 	@DeleteMapping("/board/{id}")
 	public @ResponseBody CMRespDto<String> deleteById(@PathVariable int id) {
 		
-		User principal = (User) session.getAttribute("principal");
-		
 		// 인증 확인된 사람만 함수 접근 가능(로그인한 사람)
+		User principal = (User) session.getAttribute("principal");
 		if(principal == null) {
 			throw  new MyAsyncNotFoundException("인증이 되지 않았습니다");
 		}
@@ -57,17 +62,19 @@ public class BoardController {
 		// 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
 		Board board = boardRepository.findById(id)
 				.orElseThrow(()->new MyAsyncNotFoundException("해달글을 찾을 수 없습니다."));
-		if(principal.getId() != board.getId()) {
+		
+		if(principal.getId() != board.getUser().getId()) {
 			throw new MyAsyncNotFoundException("권한이 없어서 삭제할 수 없습니다.");
 		}
 		
 		try {
-			boardRepository.deleteById(id);
+			boardRepository.deleteById(id); 
 		} catch(Exception e){
 			throw  new MyAsyncNotFoundException(id+"를 찾을 수 없어서 삭제할 수 없습니다.");
 		}
 		return new CMRespDto<String> (1, "성공", null); // @ResponseBody -> 데이터리턴!! (String = text/plain)
 	}
+	
 	
 	//글 상세보기---------------------------------------------------------------------
 	// 쿼리스트링, pathvariable => 디비 where 에 걸리는 친구들!!

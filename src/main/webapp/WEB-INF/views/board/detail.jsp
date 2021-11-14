@@ -5,7 +5,7 @@
 <div class="container">
 	<!-- 자기가 쓴 글이면(권한이 있으면) 수정/삭제 버튼 보이기 -->
 	<c:if test="${sessionScope.principal.id == boardEntity.user.id }">
-		<a href="#" class="btn btn-warning">수정</a>
+		<a href="/board/updateForm" class="btn btn-warning">수정</a>
 		<button class="btn btn-danger" onclick="deleteById(${boardEntity.id})" type="submit">삭제</button>
 	</c:if>
 	
