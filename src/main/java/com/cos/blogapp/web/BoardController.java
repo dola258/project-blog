@@ -23,9 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cos.blogapp.domain.board.Board;
 import com.cos.blogapp.domain.board.BoardRepository;
 import com.cos.blogapp.domain.user.User;
+import com.cos.blogapp.domain.user.UserRepository;
+import com.cos.blogapp.handler.exception.MyAsyncNotFoundException;
 import com.cos.blogapp.handler.exception.MyNotFoundException;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.BoardSaveReqDto;
+import com.cos.blogapp.web.dto.CMRespDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,13 +38,35 @@ public class BoardController {
 
 	// DI
 	private final BoardRepository boardRepository;
+	private final UserRepository userRepository;
 	private final HttpSession session;
+	
+	
+	
 	// 글 삭제하기--------------------------------------------------------------------
 	@DeleteMapping("/board/{id}")
-	public @ResponseBody String deleteById(@PathVariable int id) {
-			
-		boardRepository.deleteById(id);
-		return "ok"; // @ResponseBody -> 데이터리턴!! (String = text/plain)
+	public @ResponseBody CMRespDto<String> deleteById(@PathVariable int id) {
+		
+		User principal = (User) session.getAttribute("principal");
+		
+		// 인증 확인된 사람만 함수 접근 가능(로그인한 사람)
+		if(principal == null) {
+			throw  new MyAsyncNotFoundException("인증이 되지 않았습니다");
+		}
+		
+		// 권한이 있는 사람만 함수 접근 가능(principal.id == {id})
+		Board board = boardRepository.findById(id)
+				.orElseThrow(()->new MyAsyncNotFoundException("해달글을 찾을 수 없습니다."));
+		if(principal.getId() != board.getId()) {
+			throw new MyAsyncNotFoundException("권한이 없어서 삭제할 수 없습니다.");
+		}
+		
+		try {
+			boardRepository.deleteById(id);
+		} catch(Exception e){
+			throw  new MyAsyncNotFoundException(id+"를 찾을 수 없어서 삭제할 수 없습니다.");
+		}
+		return new CMRespDto<String> (1, "성공", null); // @ResponseBody -> 데이터리턴!! (String = text/plain)
 	}
 	
 	//글 상세보기---------------------------------------------------------------------
