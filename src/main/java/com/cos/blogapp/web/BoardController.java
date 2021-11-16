@@ -48,8 +48,6 @@ public class BoardController {
 	public @ResponseBody CMRespDto<String> update(@PathVariable int id, 
 			@RequestBody @Valid BoardSaveReqDto dto, BindingResult bindingResult) {
 		
-		System.out.println("asdfasddfsa");
-		
 		// 유효성 검사
 		if(bindingResult.hasErrors()) {
 			Map<String, String> errorMap = new HashMap<>();
