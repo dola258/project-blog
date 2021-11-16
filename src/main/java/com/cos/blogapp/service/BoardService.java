@@ -30,21 +30,7 @@ public class BoardService {
 	// @Transactional: 트랙잭션을 시작하는 것
 	// rollbackFor: 함수 내부에 하나의 write라도 실패하면 전체를 rollback 하는 것
 	// 주의: RuntimeException을 던져야 동작한다!
-	@Transactional(rollbackFor = MyNotFoundException.class) 
-	public void 댓글등록(int boardId, CommentSaveDto dto, User principal) {
 
-		Board boardEntity = boardRepository.findById(boardId)
-				.orElseThrow(() -> new MyNotFoundException("해당 게시글을 찾을 수 없습니다."));
-		
-		Comment comment = new Comment();
-		
-		comment.setContent(dto.getContent());
-		comment.setUser(principal);
-		comment.setBoard(boardEntity);
-		
-		// 4. save하기
-		commentRespository.save(comment);
-	}
 	
 	@Transactional(rollbackFor = MyAsyncNotFoundException.class) 
 	public void 게시글수정(int id, User principal, BoardSaveReqDto dto) {

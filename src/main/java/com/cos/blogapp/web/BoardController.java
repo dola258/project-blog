@@ -29,6 +29,7 @@ import com.cos.blogapp.domain.user.User;
 import com.cos.blogapp.handler.exception.MyAsyncNotFoundException;
 import com.cos.blogapp.handler.exception.MyNotFoundException;
 import com.cos.blogapp.service.BoardService;
+import com.cos.blogapp.service.CommentService;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.BoardSaveReqDto;
 import com.cos.blogapp.web.dto.CMRespDto;
@@ -42,6 +43,7 @@ public class BoardController {
 
 	// DI
 	private final HttpSession session;
+	private final CommentService commentService;
 	private final BoardService boardService;
 	
 	
@@ -51,7 +53,11 @@ public class BoardController {
 		
 		User principal = (User) session.getAttribute("principal");
 		
-		boardService.댓글등록(boardId, dto, principal);
+		if(principal == null) {
+			throw  new MyNotFoundException("인증이 되지 않았습니다");
+		}
+		
+		commentService.댓글등록(boardId, dto, principal);
 		
 		// 이미 만들어진 상세보기를 리다이렉트
 		return "redirect:/board/"+boardId; 

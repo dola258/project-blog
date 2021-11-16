@@ -37,8 +37,7 @@
 
 
 
-	<br />
-	<br />
+	<br /> <br />
 	<div>
 		글 번호 : ${boardEntity.id}</span> 작성자 : <span><i>${boardEntity.user.username}
 		</i></span>
@@ -57,7 +56,7 @@
 	<div class="card">
 		<form action="/board/${boardEntity.id}/comment" method="post">
 			<div class="card-body">
-				<textarea name="content" class="form-control" rows="1"></textarea>
+				<textarea name="content" class="form-control" rows="1" id="ta-content"></textarea>
 			</div>
 			<div class="card-footer">
 				<button type="submit" id="btn-reply-save" class="btn btn-primary">등록</button>
@@ -66,7 +65,15 @@
 	</div>
 	<br />
 	<!-- 댓글 쓰기 끝 -->
-
+	<script>
+		$("#ta-content").click(()=>{
+			console.log(globalUserId);
+			if(globalUserId == ""){
+				alert("로그인을 먼저 진행해주세요!!");
+				location.href = "/loginForm";
+			}
+		});
+	</script>
 	<div class="card">
 		<div class="card-header">
 			<b>댓글 리스트</b>
@@ -78,8 +85,9 @@
 					class="list-group-item d-flex justify-content-between">
 					<div>${comment.content}</div>
 					<div class="d-flex">
-						<div class="font-italic">작성자 : ${comment.user.username} &nbsp;</div>
-						<button class="badge">삭제</button>
+						<div class="font-italic">작성자 : ${comment.user.username}
+							&nbsp;</div>
+						<button class="badge" id="reply" onclick="deleteById(${comment.id})">삭제</button>
 					</div>
 				</li>
 			</c:forEach>
@@ -88,5 +96,21 @@
 	</div>
 	<br />
 </div>
-
+<script>
+			async function deleteById(commentId){
+				let response = await fetch("/comment/"+commentId, {
+					method:"delete"
+				});
+				
+				let parseResponse = await response.json();
+				
+				if(parseResponse.code == 1){
+					alert("댓글 삭제 성공");
+					//location.reload();
+					$("#reply-"+commentId).remove();
+				}else{
+					alert("댓글 삭제에 실패하였습니다. "+parseResponse.msg);
+				}
+			}
+		</script>
 <%@ include file="../layout/footer.jsp"%>

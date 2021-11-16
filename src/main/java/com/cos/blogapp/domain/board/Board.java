@@ -12,9 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import com.cos.blogapp.domain.comment.Comment;
 import com.cos.blogapp.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +41,8 @@ public class Board {
 	
 	// 양방향 매핑
 	// mappedBy 에는 FK의 주인의 변수이름을 추가한다
+	@JsonIgnoreProperties({"board"}) // comments 객체 내부의 필드를 제외시키는 법
 	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER) // 기본전략은 LAZY
+	@OrderBy("id desc")
 	private List<Comment> comments;
 }
