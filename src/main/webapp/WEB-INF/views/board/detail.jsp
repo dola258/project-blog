@@ -48,18 +48,20 @@
 		<div>${boardEntity.content }</div>
 	</div>
 	<hr />
-
+	
+	<!-- 댓글 쓰기 시작 -->
 	<div class="card">
-		<form>
+		<form action="/board/${boardEntity.id}/comment" method="post">
 			<div class="card-body">
-				<textarea id="reply-content" class="form-control" rows="1"></textarea>
+				<textarea name="content" class="form-control" rows="1"></textarea>
 			</div>
 			<div class="card-footer">
-				<button type="button" id="btn-reply-save" class="btn btn-primary">등록</button>
+				<button type="submit" id="btn-reply-save" class="btn btn-primary">등록</button>
 			</div>
 		</form>
 	</div>
 	<br />
+	<!-- 댓글 쓰기 끝 -->
 
 	<div class="card">
 		<div class="card-header"><b>댓글 리스트</b></div>

@@ -24,13 +24,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.blogapp.domain.board.Board;
 import com.cos.blogapp.domain.board.BoardRepository;
+import com.cos.blogapp.domain.comment.Comment;
+import com.cos.blogapp.domain.comment.CommentRepository;
 import com.cos.blogapp.domain.user.User;
-import com.cos.blogapp.domain.user.UserRepository;
 import com.cos.blogapp.handler.exception.MyAsyncNotFoundException;
 import com.cos.blogapp.handler.exception.MyNotFoundException;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.BoardSaveReqDto;
 import com.cos.blogapp.web.dto.CMRespDto;
+import com.cos.blogapp.web.dto.CommentSaveDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,6 +43,32 @@ public class BoardController {
 	// DI
 	private final BoardRepository boardRepository;
 	private final HttpSession session;
+	private final CommentRepository commentRepository;
+	
+	// 댓글 작성----------------------------------------------------------------------------
+	@PostMapping("/board/{boardId}/comment")
+	public String commentSave(@PathVariable int boardId, @Valid CommentSaveDto dto) {
+		
+		// 1. DTO로 데이터 받기
+		
+		// 2. Comment 객체 만들기
+		Comment comment = new Comment();
+
+		// 3. Comment 객체에 값 추가
+		User principal = (User) session.getAttribute("principal");
+		Board boardEntity = boardRepository.findById(boardId)
+				.orElseThrow(() -> new MyNotFoundException("해당 게시글을 찾을 수 없습니다."));
+		
+		comment.setContent(dto.getContent());
+		comment.setUser(principal);
+		comment.setBoard(boardEntity);
+		
+		// 4. save하기
+		commentRepository.save(comment);
+		
+		// 이미 만들어진 상세보기를 리다이렉트
+		return "redirect:/board/"+boardId; 
+	}
 	
 	
 	// 글 수정 기능 -------------------------------------------------------------------------
