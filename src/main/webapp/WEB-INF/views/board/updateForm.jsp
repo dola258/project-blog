@@ -34,7 +34,7 @@
 		// JSON.stringify(자바스크립트 오브젝트) -> 리턴 JSON
 		// JSON.parse(제이슨 문자열) -> 리턴 자바스크립트 오브젝트
 		
-		let response = await fetch("/board/"+id, {
+		let response = await fetch("/api/board/"+id, {
 				method: "put",
 				body: JSON.stringify(boardUpdateDto),
 				headers: {

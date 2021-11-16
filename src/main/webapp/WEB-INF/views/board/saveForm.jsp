@@ -5,7 +5,7 @@
 <%@ include file="../layout/header.jsp" %>
 
 <div class="container">
-	<form action="/board" method="POST">
+	<form action="/api/board" method="POST">
 		<div class="form-group">
 			<input type="text" name="title" class="form-control" placeholder="Enter title" required="required">
 		</div>

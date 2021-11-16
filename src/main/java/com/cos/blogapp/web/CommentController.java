@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.blogapp.domain.user.User;
-import com.cos.blogapp.handler.exception.MyAsyncNotFoundException;
 import com.cos.blogapp.service.CommentService;
 import com.cos.blogapp.web.dto.CMRespDto;
 
@@ -22,16 +21,14 @@ public class CommentController {
 	private final CommentService commentService;
 	private final HttpSession session;
 	
-	@DeleteMapping("/comment/{id}")
+	
+	// 댓글 삭제-------------------------------------------------------------
+	@DeleteMapping("/api/comment/{id}")
 	public @ResponseBody CMRespDto<?> deleteById(@PathVariable int id) {
 		
 		// 인증
 		User principal = (User) session.getAttribute("principal");
 
-		if(principal == null) {
-			throw  new MyAsyncNotFoundException("인증이 되지 않았습니다");
-		}
-		
 		commentService.댓글삭제(id, principal);
 		
 		return new CMRespDto<>(1, "성공", null);

@@ -14,7 +14,7 @@
 	<script>
 		async function deleteById(id) {
 			// 1. 비동기 함수 호출
-			let response = await fetch("/board/"+id, {
+			let response = await fetch("/api/board/"+id, {
 				method: "delete"
 			});
 			
@@ -54,7 +54,7 @@
 
 	<!-- 댓글 쓰기 시작 -->
 	<div class="card">
-		<form action="/board/${boardEntity.id}/comment" method="post">
+		<form action="/api/board/${boardEntity.id}/comment" method="post">
 			<div class="card-body">
 				<textarea name="content" class="form-control" rows="1" id="ta-content"></textarea>
 			</div>
@@ -97,20 +97,20 @@
 	<br />
 </div>
 <script>
-			async function deleteById(commentId){
-				let response = await fetch("/comment/"+commentId, {
-					method:"delete"
-				});
-				
-				let parseResponse = await response.json();
-				
-				if(parseResponse.code == 1){
-					alert("댓글 삭제 성공");
-					//location.reload();
-					$("#reply-"+commentId).remove();
-				}else{
-					alert("댓글 삭제에 실패하였습니다. "+parseResponse.msg);
-				}
-			}
-		</script>
+	async function deleteById(commentId){
+		let response = await fetch("/comment/"+commentId, {
+			method:"delete"
+		});
+		
+		let parseResponse = await response.json();
+		
+		if(parseResponse.code == 1){
+			alert("댓글 삭제 성공");
+			//location.reload();
+			$("#reply-"+commentId).remove();
+		}else{
+			alert("댓글 삭제에 실패하였습니다. "+parseResponse.msg);
+		}
+	}
+</script>
 <%@ include file="../layout/footer.jsp"%>

@@ -35,7 +35,7 @@ public class UserController {
 	private final HttpSession session;
 	
 	// 회원정보 수정--------------------------------------------------------------------------------
-	@PutMapping("/user/{id}")                                                // json 통신에서 꼭 필요!!
+	@PutMapping("/api/user/{id}")                                                // json 통신에서 꼭 필요!!
 	public @ResponseBody CMRespDto<String> update(@PathVariable int id, @Valid @RequestBody UserUpdateDto dto, BindingResult bindingResult) {
 		// 유효성
 		if(bindingResult.hasErrors()) {
@@ -51,10 +51,6 @@ public class UserController {
 		// 인증
 		User principal = (User) session.getAttribute("principal");
 
-		if(principal == null) {
-			throw  new MyAsyncNotFoundException("인증이 되지 않았습니다");
-		}
-		
 		// 권한
 		if(principal.getId() != id) {
 			throw  new MyAsyncNotFoundException("회원정보를 수정할 권한이 없습니다.");
@@ -69,7 +65,7 @@ public class UserController {
 	
 	
 	// 회원정보페이지--------------------------------------------------------------------------------------------------------------------
-	@GetMapping("user/{id}")
+	@GetMapping("/api/user/{id}")
 	public String userInfo(@PathVariable int id) {
 		// 기본은 userRepository.findById(id)로 DB에서 가져와야함
 		// 편법은 세션에서 값을 가져올 수도 있다 - 인증과 권한 필요 없음
