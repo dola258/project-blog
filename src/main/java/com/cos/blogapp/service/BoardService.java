@@ -56,10 +56,9 @@ public class BoardService {
 			throw new MyAsyncNotFoundException("해당 게시글의 주인이 아닙니다.");
 		}
 		
-		Board board = dto.toEntity(principal);
-		board.setId(id); // toEntity에 id가 없다 하지만 update할 땐 id가 필요하다
-		
-		boardRepository.save(board);
+		// 영속화된 데이터를 변경하면!
+		boardEntity.setTitle(dto.getTitle());
+		boardEntity.setContent(dto.getContent());
 	}
 
 	public Board 게시글수정페이지이동(int id) {
@@ -93,6 +92,15 @@ public class BoardService {
 	 
 	
 	public Board 게시글상세보기(int id) {
+		
+		// 방법 1 - orElse는 값을 찾으면 Board가 리턴, 못찾으면 (괄호안 내용 리턴) - 추천 xxx
+		/*
+		
+		Board boardEntity =  boardRepository.findById(id)
+				.orElse(new Board(100, "글없어요", "글없어요", null));
+		
+		*/
+		
 		// 방법 2 - orElseThrow
 		Board boardEntity =  boardRepository.findById(id)
 				.orElseThrow(()-> new MyNotFoundException(id+" 못찾았어요") );

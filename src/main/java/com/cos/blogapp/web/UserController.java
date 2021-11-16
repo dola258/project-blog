@@ -61,6 +61,7 @@ public class UserController {
 		}
 		
 		userService.회원수정(principal, dto);
+		principal.setEmail(dto.getEmail());
 		session.setAttribute("principal", principal); // 세션값 변경
 		
 		return new CMRespDto<String>(1, "성공", null);

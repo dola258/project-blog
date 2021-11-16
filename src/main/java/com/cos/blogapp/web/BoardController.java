@@ -41,10 +41,9 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	// DI
-	private final BoardRepository boardRepository;
 	private final HttpSession session;
-	private final CommentRepository commentRepository;
 	private final BoardService boardService;
+	
 	
 	// 댓글 작성----------------------------------------------------------------------------
 	@PostMapping("/board/{boardId}/comment")
@@ -54,7 +53,6 @@ public class BoardController {
 		
 		boardService.댓글등록(boardId, dto, principal);
 		
-		
 		// 이미 만들어진 상세보기를 리다이렉트
 		return "redirect:/board/"+boardId; 
 	}
@@ -63,7 +61,7 @@ public class BoardController {
 	// 글 수정 기능 -------------------------------------------------------------------------
 	@PutMapping("/board/{id}")
 	public @ResponseBody CMRespDto<String> update(@PathVariable int id, 
-			@RequestBody @Valid BoardSaveReqDto dto, BindingResult bindingResult) {
+									@RequestBody @Valid BoardSaveReqDto dto, BindingResult bindingResult) {
 		
 		// 유효성 검사
 		if(bindingResult.hasErrors()) {
@@ -91,9 +89,7 @@ public class BoardController {
 	@GetMapping("/board/{id}/updateForm")
 	public String boardUpdateForm(@PathVariable int id, Model model) {	
 		
-		Board boardEntity = boardService.게시글수정페이지이동(id);
-		
-		model.addAttribute("boardEntity", boardEntity);
+		model.addAttribute("boardEntity", boardService.게시글수정페이지이동(id));
 
 		return "board/updateForm";
 	}
@@ -115,26 +111,16 @@ public class BoardController {
 	
 	
 	//글 상세보기---------------------------------------------------------------------
-	// 쿼리스트링, pathvariable => 디비 where 에 걸리는 친구들!!
+	// 쿼리스트링, @PathVariable => 디비 where 에 걸리는 친구들!!
 	// 1. 컨트롤러 선정, 2. Http Method 선정, 3. 받을 데이터가 있는지!! (body, 쿼리스트링, 패스var)
 	// 4. 디비에 접근을 해야하면 Model 접근하기 orElse Model에 접근할 필요가 없다.
 	@GetMapping("/board/{id}")
 	public String detail(@PathVariable int id, Model model) {
 		
-
-		// 방법 1 - orElse는 값을 찾으면 Board가 리턴, 못찾으면 (괄호안 내용 리턴) - 추천 xxx
-		/*
+		// Board 객체에 존재하는 것 (Board-있음, User-있음, List<Commnet>-없음)
+		model.addAttribute("boardEntity", boardService.게시글상세보기(id));
 		
-		Board boardEntity =  boardRepository.findById(id)
-				.orElse(new Board(100, "글없어요", "글없어요", null));
-		
-		*/
-		
-		Board boardEntity = boardService.게시글상세보기(id);
-		
-		model.addAttribute("boardEntity", boardEntity);
-		
-		return "board/detail";
+		return "board/detail"; // ViewResolver 발동
 	}
 	
 	
@@ -183,9 +169,7 @@ public class BoardController {
 	@GetMapping("/board")
 	public String home(Model model, int page) {
 		
-		Page<Board> boardsEntity = boardService.게시글목록보기(page);
-		
-		model.addAttribute("boardsEntity", boardsEntity);
+		model.addAttribute("boardsEntity", boardService.게시글목록보기(page));
 		
 		return "board/list";
 	}

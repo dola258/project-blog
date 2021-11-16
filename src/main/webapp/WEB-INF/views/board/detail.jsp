@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <%@ include file="../layout/header.jsp"%>
 
@@ -6,9 +7,10 @@
 	<!-- 자기가 쓴 글이면(권한이 있으면) 수정/삭제 버튼 보이기 -->
 	<c:if test="${sessionScope.principal.id == boardEntity.user.id }">
 		<a href="/board/${boardEntity.id}/updateForm" class="btn btn-warning">수정</a>
-		<button class="btn btn-danger" onclick="deleteById(${boardEntity.id})" type="submit">삭제</button>
+		<button class="btn btn-danger" onclick="deleteById(${boardEntity.id})"
+			type="submit">삭제</button>
 	</c:if>
-	
+
 	<script>
 		async function deleteById(id) {
 			// 1. 비동기 함수 호출
@@ -35,9 +37,11 @@
 
 
 
-	<br /><br />
+	<br />
+	<br />
 	<div>
-		글 번호 : ${boardEntity.id}</span> 작성자 : <span><i>${boardEntity.user.username} </i></span>
+		글 번호 : ${boardEntity.id}</span> 작성자 : <span><i>${boardEntity.user.username}
+		</i></span>
 	</div>
 	<br />
 	<div>
@@ -48,7 +52,7 @@
 		<div>${boardEntity.content }</div>
 	</div>
 	<hr />
-	
+
 	<!-- 댓글 쓰기 시작 -->
 	<div class="card">
 		<form action="/board/${boardEntity.id}/comment" method="post">
@@ -64,18 +68,25 @@
 	<!-- 댓글 쓰기 끝 -->
 
 	<div class="card">
-		<div class="card-header"><b>댓글 리스트</b></div>
+		<div class="card-header">
+			<b>댓글 리스트</b>
+		</div>
+
 		<ul id="reply-box" class="list-group">
-			<li id="reply-1" class="list-group-item d-flex justify-content-between">
-				<div>댓글입니다</div>
-				<div class="d-flex">
-					<div class="font-italic">작성자 : 홍길동 &nbsp;</div>
-					<button class="badge">삭제</button>
-				</div>
-			</li>
+			<c:forEach var="comment" items="${boardEntity.comments}">
+				<li id="reply-${comment.id}"
+					class="list-group-item d-flex justify-content-between">
+					<div>${comment.content}</div>
+					<div class="d-flex">
+						<div class="font-italic">작성자 : ${comment.user.username} &nbsp;</div>
+						<button class="badge">삭제</button>
+					</div>
+				</li>
+			</c:forEach>
 		</ul>
+
 	</div>
-	<br/>
+	<br />
 </div>
 
-<%@ include file="../layout/footer.jsp"%> 
+<%@ include file="../layout/footer.jsp"%>
