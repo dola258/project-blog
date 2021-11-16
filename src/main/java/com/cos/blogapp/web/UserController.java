@@ -1,6 +1,6 @@
  package com.cos.blogapp.web;
 
-import java.util.HashMap;
+import java.util.HashMap;	
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.blogapp.domain.user.User;
-import com.cos.blogapp.domain.user.UserRepository;
 import com.cos.blogapp.handler.exception.MyAsyncNotFoundException;
-import com.cos.blogapp.util.MyAlgorithm;
-import com.cos.blogapp.util.SHA256;
+import com.cos.blogapp.service.UserService;
 import com.cos.blogapp.util.Script;
 import com.cos.blogapp.web.dto.CMRespDto;
 import com.cos.blogapp.web.dto.JoinReqDto;
@@ -33,10 +31,10 @@ import lombok.RequiredArgsConstructor;
 @Controller
 public class UserController {
 	
-	private final UserRepository userRepository;
+	private final UserService userService;
 	private final HttpSession session;
 	
-	
+	// 회원정보 수정--------------------------------------------------------------------------------
 	@PutMapping("/user/{id}")                                                // json 통신에서 꼭 필요!!
 	public @ResponseBody CMRespDto<String> update(@PathVariable int id, @Valid @RequestBody UserUpdateDto dto, BindingResult bindingResult) {
 		// 유효성
@@ -62,17 +60,14 @@ public class UserController {
 			throw  new MyAsyncNotFoundException("회원정보를 수정할 권한이 없습니다.");
 		}
 		
-		// 핵심 로직
-		principal.setEmail(dto.getEmail());
+		userService.회원수정(principal, dto);
 		session.setAttribute("principal", principal); // 세션값 변경
-		
-		userRepository.save(principal);
 		
 		return new CMRespDto<String>(1, "성공", null);
 	}
 	
 	
-	// 회원정보페이지-----------------------------
+	// 회원정보페이지--------------------------------------------------------------------------------------------------------------------
 	@GetMapping("user/{id}")
 	public String userInfo(@PathVariable int id) {
 		// 기본은 userRepository.findById(id)로 DB에서 가져와야함
@@ -85,7 +80,7 @@ public class UserController {
 	}
 	
 	
-	//--------로그아웃 기능---------
+	//로그아웃 기능-----------------------------------------------------------------------------------------
 	@GetMapping("/logout")
 	public String logout() {
 	//  세션 무효화 -> jsessonId에 있는 값을 비우는것
@@ -96,7 +91,7 @@ public class UserController {
 	}
 	
 	
-	//---------로그인페이지, 회원가입 페이지로 이동---------
+	//로그인페이지, 회원가입 페이지로 이동------------------------------------------------------------------------
 	@GetMapping("/loginForm")
 	public String login() {
 		return "user/loginForm";
@@ -108,7 +103,7 @@ public class UserController {
 	}
 	
 	
-	//--------로그인 기능---------
+	//로그인 기능-----------------------------------------------------------------------------------------
 	@PostMapping("/login")
 	public @ResponseBody String login(@Valid LoginReqDto dto, BindingResult bindingResult)  {
 		
@@ -126,11 +121,7 @@ public class UserController {
 		System.out.println(dto.getUsername());
 		System.out.println(dto.getPassword());
 		
-		// 2. DB 조회
-		User userEntity = userRepository.mLogin(
-											dto.getUsername(), 
-											SHA256.encrypt(dto.getPassword(), MyAlgorithm.SHA256)
-											);
+		User userEntity = userService.로그인(dto);
 		
 		if(userEntity == null) {
 			// null이면 loginForm으로 
@@ -145,7 +136,7 @@ public class UserController {
 	}
 	
 	
-	//--------회원가입 기능---------
+	//회원가입 기능-----------------------------------------------------------------------------------------
 	@PostMapping("/join")
 	public @ResponseBody String join(@Valid JoinReqDto dto, BindingResult bindingResult) { // username=love&password=1234&email=love@nate.com으로 데이터가 들어온다
 		
@@ -160,13 +151,7 @@ public class UserController {
 			return Script.back(errorMap.toString());
 		}
 		
-		String encPassword = SHA256.encrypt(dto.getPassword(), MyAlgorithm.SHA256);
-		
-		dto.setPassword(encPassword);
-		
-		// 2. 정상 - 로그인 페이지
-		// User 객체에 데이터를 넣고 User 객체로 받기
-		userRepository.save(dto.toEntity());
+		userService.회원가입(dto);
 		
 		return Script.href("/loginForm"); //리다이렉션(http상태코드: 300)
 	}

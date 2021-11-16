@@ -3,8 +3,6 @@ package com.cos.blogapp.web.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.cos.blogapp.domain.board.Board;
-import com.cos.blogapp.domain.user.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
